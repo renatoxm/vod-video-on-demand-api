@@ -1,0 +1,7 @@
+node_modules
+videos/*
+!videos/.gitkeep
+.env
+# MongoDb data
+data
+build

@@ -1,0 +1,81 @@
+{
+  "name": "vod-video-on-demand-api",
+  "version": "1.0.0",
+  "description": "API for a Video on demand service in Node.js",
+  "main": "src/server.ts",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "NODE_ENV=production node -r ./build/server.js",
+    "build": "tsc --build tsconfig.build.json",
+    "prepare": "husky install",
+    "lint": "eslint \"./src/**/*.ts\"",
+    "prettier:check": "prettier --config .prettierrc \"./src/**/*.+(js|json|ts)\" --check --ignore-unknown",
+    "prettier:write": "prettier --config .prettierrc \"./src/**/*.+(js|json|ts)\" --write --ignore-unknown",
+    "test": "mocha -r tsconfig-paths/register -r ts-node/register  \"./src/test/**/*.ts\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renatoxm/vod-video-on-demand-api.git"
+  },
+  "author": "Renato Nabinger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/renatoxm/vod-video-on-demand-api/issues"
+  },
+  "homepage": "https://github.com/renatoxm/vod-video-on-demand-api#readme",
+  "dependencies": {
+    "@mantine/form": "^6.0.0",
+    "@typegoose/typegoose": "^10.3.0",
+    "argon2": "^0.30.3",
+    "busboy": "^1.6.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^6.0.1",
+    "http-status-codes": "^2.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^6.10.0",
+    "mongoose-slug-generator": "^1.0.4",
+    "nanoid": "^3.3.4",
+    "pino": "^8.11.0",
+    "zod": "^3.20.6",
+    "zod-express-middleware": "^1.4.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
+    "@types/busboy": "^1.5.0",
+    "@types/chai": "^4.3.4",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/mocha": "^10.0.1",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.21",
+    "pino-pretty": "^9.4.0",
+    "supertest": "^6.3.3",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^3.14.2",
+    "typescript": "^4.9.5"
+  },
+  "lint-staged": {
+    "./src/**/*.+(ts|js)": [
+      "npm run lint",
+      "npm run prettier:check"
+    ]
+  }
+}
