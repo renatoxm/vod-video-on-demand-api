@@ -6,5 +6,9 @@ declare namespace NodeJS {
     PORT: string
     JWT_SECRET: string
     EXPIRES_IN: string
+    AWS_ACCESS_KEY_ID: string
+    AWS_SECRET_ACCESS_KEY: string
+    AWS_REGION: string
+    BUCKET_NAME: string
   }
 }

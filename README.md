@@ -50,6 +50,47 @@ cp .env.example .env
 npm i
 ```
 
+## Creating a AWS S3 Bucket
+
+1. Create a new [IAM User](https://aws.amazon.com/iam/):
+   1. Choose programatic access.
+   2. Select "Attach existing policies directly"
+   3. Add `AmazonS3FullAccess`.
+2. Save the access key and secret key for the IAM User.
+   1. This is used for programmatic access in the API Route.
+3. Install the [AWS CLI](https://aws.amazon.com/cli/):
+   1. Run `aws configure`.
+   2. Enter your root AWS user access key and secret key.
+   3. Enter your default region.
+4. Create an `.env.local` file similar to `.env.example`.
+   1. Enter your access key and secret key from the IAM user.
+5. You must configure cors, for the upload to work
+
+   1. [S3 Documentation](https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-photo-album.html)
+
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Action": ["s3:DeleteObject", "s3:GetObject", "s3:ListBucket", "s3:PutObject", "s3:PutObjectAcl"],
+         "Resource": ["arn:aws:s3:::BUCKET_NAME", "arn:aws:s3:::BUCKET_NAME/*"]
+       }
+     ]
+   }
+   ```
+
+6. Run `cdk bootstrap`.
+7. Run `cdk deploy` to create an S3 bucket with an IAM policy.
+8. Visit your newly created S3 bucket and retrieve the name and region.
+9. Add the name and region to `.env.local`.
+10. Run `npm run dev` to start the app at `localhost:3000`.
+11. Choose a `.png` or `.jpg` file.
+12. You should see your file successfully uploaded to S3.
+
+This example uses [`createPresignedPost`](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#createPresignedPost-property) instead of [`getSignedUrlPromise`](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrlPromise-property) to allow setting max/min file sizes with `content-length-range`.
+
 ## Scripts
 
 ### Basic

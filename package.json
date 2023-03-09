@@ -27,6 +27,7 @@
     "@mantine/form": "^6.0.0",
     "@typegoose/typegoose": "^10.3.0",
     "argon2": "^0.30.3",
+    "aws-sdk": "^2.1330.0",
     "busboy": "^1.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

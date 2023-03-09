@@ -5,6 +5,8 @@ import { StatusCodes } from 'http-status-codes'
 import { Video } from '../models/video.model'
 import { createVideo, findVideo, findVideos } from '../services/video.service'
 import { UpdateVideoBody, UpdateVideoParams } from '../schemas/video.schema'
+import s3 from '../utils/s3'
+import config from '../config'
 
 const MIME_TYPES = ['video/mp4']
 
@@ -12,6 +14,60 @@ const CHUNK_SIZE_IN_BYTES = 1000000 // 1mb
 
 function getPath({ videoId, extension }: { videoId: Video['videoId']; extension: Video['extension'] }) {
   return `${process.cwd()}/videos/${videoId}.${extension}`
+}
+
+export async function uploadVideoS3Handler(req: Request, res: Response) {
+  const bb = busboy({ headers: req.headers })
+
+  const user = res.locals.user
+
+  try {
+    const video = await createVideo({ owner: user._id })
+
+    bb.on('file', async (_, file, info) => {
+      const { filename, encoding, mimeType } = info
+
+      if (!MIME_TYPES.includes(mimeType)) {
+        return res.status(StatusCodes.BAD_REQUEST).send('Invalid file type')
+      }
+
+      const extension = mimeType.split('/')[1]
+
+      video.extension = extension
+
+      await video.save()
+
+      const params = {
+        Bucket: config.BUCKET_NAME,
+        Key: `${video.videoId}.${extension}`,
+        Body: file,
+      }
+
+      const options = { partSize: 5 * 1024 * 1024, queueSize: 10 } // 5 MB
+
+      try {
+        await s3.upload(params, options).promise()
+      } catch (err) {
+        console.error(err)
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Error uploading file to S3')
+      }
+    })
+
+    bb.on('close', () => {
+      res.writeHead(StatusCodes.CREATED, {
+        Connection: 'close',
+        'Content-Type': 'application/json',
+      })
+
+      res.write(JSON.stringify(video))
+      res.end()
+    })
+
+    req.pipe(bb)
+  } catch (err) {
+    console.error(err)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Error uploading video')
+  }
 }
 
 export async function uploadVideoHandler(req: Request, res: Response) {
@@ -22,11 +78,13 @@ export async function uploadVideoHandler(req: Request, res: Response) {
   const video = await createVideo({ owner: user._id })
 
   bb.on('file', async (_, file, info) => {
-    if (!MIME_TYPES.includes(info.mimeType)) {
+    const { mimeType } = info
+
+    if (!MIME_TYPES.includes(mimeType)) {
       return res.status(StatusCodes.BAD_REQUEST).send('Invalid file type')
     }
 
-    const extension = info.mimeType.split('/')[1]
+    const extension = mimeType.split('/')[1]
 
     const filePath = getPath({
       videoId: video.videoId,

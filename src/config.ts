@@ -11,6 +11,10 @@ interface ENV {
   CORS_ORIGIN: string | undefined
   JWT_SECRET: string | undefined
   EXPIRES_IN: string | undefined
+  AWS_ACCESS_KEY_ID: string | undefined
+  AWS_SECRET_ACCESS_KEY: string | undefined
+  AWS_REGION: string | undefined
+  BUCKET_NAME: string | undefined
 }
 
 interface Config {
@@ -20,6 +24,10 @@ interface Config {
   CORS_ORIGIN: string
   JWT_SECRET: string
   EXPIRES_IN: string
+  AWS_ACCESS_KEY_ID: string
+  AWS_SECRET_ACCESS_KEY: string
+  AWS_REGION: string
+  BUCKET_NAME: string
 }
 
 const getConfig = (): ENV => {
@@ -30,6 +38,10 @@ const getConfig = (): ENV => {
     CORS_ORIGIN: process.env.CORS_ORIGIN,
     JWT_SECRET: process.env.JWT_SECRET,
     EXPIRES_IN: process.env.EXPIRES_IN,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    AWS_REGION: process.env.AWS_REGION,
+    BUCKET_NAME: process.env.BUCKET_NAME,
   }
 }
 

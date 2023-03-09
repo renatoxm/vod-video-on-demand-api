@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { verifyJwt } from '../utils/auth.utils'
+import { verifyJwt } from '../utils/auth'
 
 function deserializeUser(req: Request, res: Response, next: NextFunction) {
   const accessToken = (req.headers.authorization || req.cookies.accessToken || '').replace(/^Bearer\s/, '')

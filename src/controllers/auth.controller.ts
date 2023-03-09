@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes'
 import omit from '../helpers/omit'
 import { findUserByEmail } from '../services/user.service'
 import { LoginBody } from '../schemas/auth.schema'
-import { signJwt } from '../utils/auth.utils'
+import { signJwt } from '../utils/auth'
 
 export async function loginHandler(req: Request<{}, {}, LoginBody>, res: Response) {
   const { email, password } = req.body
